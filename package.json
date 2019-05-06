@@ -1,0 +1,16 @@
+{
+  "name": "projects-DB",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "knex": "^0.16.5",
+    "pg": "^7.10.0"
+  }
+}
