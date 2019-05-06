@@ -3,7 +3,9 @@
 A database that provides storage space for projects and all their palettes.
 
 Created by: 
+
 Devin Kapla
+
 Gabe 
 
 with: Node.js, Express.js, Knex.js, and deployed on Heroku
