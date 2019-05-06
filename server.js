@@ -1,12 +1,22 @@
 const express = require('express');
 const app = express();
+const cors = require('cors')
 app.set('port', process.env.PORT || 3001)
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
+var corsOpt = {
+  origin: 'http://localhost:3001',
+  successStatus: 200
+}
+
+app.use(cors(corsOpt))
 app.use(express.json())
+
 app.listen(app.get('port'), () => console.log(`Listening on port ${app.get('port')}`));
+
+// custom api end point**
 
 app.get('/api/projects', (req, res) => {
 
