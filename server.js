@@ -29,7 +29,13 @@ app.get('/api/projects', (req, res) => {
 })
 
 app.get('/api/palettes', (req, res) => {
-
+  database('palettes').select()
+    .then(palettes => {
+      res.status(200).json(palettes)
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 app.get('/api/projects/:id', (req, res) => {
