@@ -70,7 +70,7 @@ app.post('/api/projects', (req, res) => {
     .catch(err => res.status(500).json(err))
 })
 
-app.post('/api/project/palettes/:project_id', (req, res) => { // foreign id
+app.post('/api/projects/palettes/:project_id', (req, res) => { // foreign id
   const project_id = req.params.project_id
   const palette = { ...req.body, project_id };
   const required = ['name', 'color1', 'color2', 'color3', 'color4', 'color5'];
@@ -150,21 +150,21 @@ app.delete('/api/project/:id', (req, res) => {
         .then(numOfProjects => {
           const notFound = `No Projects with an ID of ${id} Found`
           if (numOfProjects === 0) return res.status(404).json(notFound)
-          res.status(201).json(`deleted ${numOfPalettes} palettes and ${numOfProjects} project`)
+          res.status(200).json(`deleted ${numOfPalettes} palettes and ${numOfProjects} project`)
         })
         .catch(err => res.status(500).json(err))
     })
     .catch(err => res.status(500).json(err));
 })
 
-app.delete('/api/palettes/:id', (req, res) => {
+app.delete('/api/projects/palettes/:id', (req, res) => {
   const id = req.params.id
 
   database('palettes').where('id', id).del()
     .then(numOfPalettes => {
       const notFound = `No palettes with an ID of ${id} found`
       if (numOfPalettes === 0) return res.status(404).json(notFound)
-      res.status(201).json(`Deleted ${numOfPalettes} palettes`)
+      res.status(200).json(`Deleted ${numOfPalettes} palettes`)
     })
     .catch(err => res.status(500).json(err))
 })
