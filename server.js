@@ -23,9 +23,7 @@ app.get('/api/projects', (req, res) => {
     .then(projects => {
       res.status(200).json(projects)
     })
-    .catch(err => {
-      res.status(500).json(err)
-    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.get('/api/palettes', (req, res) => {
@@ -33,9 +31,7 @@ app.get('/api/palettes', (req, res) => {
     .then(palettes => {
       res.status(200).json(palettes)
     })
-    .catch(err => {
-      res.status(500).json(err)
-    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.get('/api/projects/:id', (req, res) => {
@@ -46,9 +42,7 @@ app.get('/api/projects/:id', (req, res) => {
       if (project.length === 0) return res.status(404).json(errMsg)
       res.status(200).json(project[0])
     })
-    .catch(err => {
-      res.status(500).json(err)
-    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.get('/api/palettes/:id', (req, res) => {
@@ -59,9 +53,7 @@ app.get('/api/palettes/:id', (req, res) => {
       if (palette.length === 0) return res.status(404).json(errMsg)
       res.status(200).json(palette[0])
     })
-    .catch(err => {
-      res.status(500).json(err)
-    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.post('/api/projects', (req, res) => {
@@ -78,15 +70,13 @@ app.post('/api/projects', (req, res) => {
     .then(projectId => {
       res.status(201).json(`Project created, ID: ${projectId}`)
     })
-    .catch(err => {
-      res.status(500).json(err)
-    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.post('/api/palettes', (req, res) => {
-  const palette = req.body
-
-  for (let requiredParam of ['name', 'color1', 'color2', 'color3', 'color4', 'color5']) {
+  const palette = req.body;
+  const required = ['name', 'color1', 'color2', 'color3', 'color4', 'color5'];
+  for (let requiredParam of required) {
     if (!palette[requiredParam]) {
       const errMsg = {
         error: `Expected format: 
@@ -105,17 +95,52 @@ app.post('/api/palettes', (req, res) => {
     .then(paletteId => {
       res.status(201).json(`palette created, ID: ${paletteId}`)
     })
-    .catch(err => {
-      res.status(500).json(err)
-    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.patch('/api/projects/:id', (req, res) => {
+  const id = req.params.id
+  const project = req.body
 
+  for (let requiredParam of ['name', 'desc']) {
+    if (!project[requiredParam]) {
+      const errMsg = { error: `Expected format: { name: <String>, desc: <String> }. You're missing a "${requiredParam}" property.` }
+      return res.status(422).json(errMsg)
+    }
+  }
+
+  database('projects').where('id', id).update(project, 'id')
+    .then(projectId => {
+      res.status(200).json(`Project Id: ${projectId} updated.`)
+    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.patch('/api/palettes/:id', (req, res) => {
+  const id = req.params.id
+  const palette = req.body
 
+  const required = ['name', 'color1', 'color2', 'color3', 'color4', 'color5'];
+  for (let requiredParam of required) {
+    if (!palette[requiredParam]) {
+      const errMsg = {
+        error: `Expected format: 
+        { name: <String>,
+          color1: <String>,
+          color2: <String>,
+          color3: <String>,
+          color4: <String>,
+          color5: <String> }. You're missing a "${requiredParam}" property.`
+      }
+      return res.status(422).json(errMsg)
+    }
+  }
+
+  database('palettes').where('id', id).update(palette, 'id')
+    .then(paletteId => {
+      res.status(200).json(`palette Id: ${paletteId} updated.`)
+    })
+    .catch(err => res.status(500).json(err))
 })
 
 app.delete('/api/project/:id', (req, res) => {
