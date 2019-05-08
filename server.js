@@ -144,9 +144,29 @@ app.patch('/api/palettes/:id', (req, res) => {
 })
 
 app.delete('/api/project/:id', (req, res) => {
+  const id = req.params.id
 
+  database('palettes').where('project_id', id).del()
+    .then(numOfPalettes => {
+      database('projects').where('id', id).del()
+        .then(numOfProjects => {
+          const notFound = `No Projects with an ID of ${id} Found`
+          if (numOfProjects === 0) return res.status(404).json(notFound)
+          res.status(201).json(`deleted ${numOfPalettes} paleetes and ${numOfProjects} project`)
+        })
+        .catch(err => res.status(500).json(err))
+    })
+    .catch(err => res.status(500).json(err));
 })
 
 app.delete('/api/palettes/:id', (req, res) => {
+  const id = req.params.id
 
+  database('palettes').where('id', id).del()
+    .then(numOfPalettes => {
+      const notFound = `No palettes with an ID of ${id} found`
+      if (numOfPalettes === 0) return res.status(404).json(notFound)
+      res.status(201).json(`Deleted ${numOfPalettes} palettes`)
+    })
+    .catch(err => res.status(500).json(err))
 })
