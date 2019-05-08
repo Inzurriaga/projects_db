@@ -65,11 +65,49 @@ app.get('/api/palettes/:id', (req, res) => {
 })
 
 app.post('/api/projects', (req, res) => {
+  const project = req.body
 
+  for (let requiredParam of ['name', 'desc']) {
+    if (!project[requiredParam]) {
+      const errMsg = { error: `Expected format: { name: <String>, desc: <String> }. You're missing a "${requiredParam}" property.` }
+      return res.status(422).json(errMsg)
+    }
+  }
+
+  database('projects').insert(project, 'id')
+    .then(projectId => {
+      res.status(201).json(`Project created, ID: ${projectId}`)
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 app.post('/api/palettes', (req, res) => {
+  const palette = req.body
 
+  for (let requiredParam of ['name', 'color1', 'color2', 'color3', 'color4', 'color5']) {
+    if (!palette[requiredParam]) {
+      const errMsg = {
+        error: `Expected format: 
+        { name: <String>,
+          color1: <String>,
+          color2: <String>,
+          color3: <String>,
+          color4: <String>,
+          color5: <String> }. You're missing a "${requiredParam}" property.`
+      }
+      return res.status(422).json(errMsg)
+    }
+  }
+
+  database('palettes').insert(palette, 'id')
+    .then(paletteId => {
+      res.status(201).json(`palette created, ID: ${paletteId}`)
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 app.patch('/api/projects/:id', (req, res) => {
