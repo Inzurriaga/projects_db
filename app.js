@@ -42,9 +42,9 @@ app.get('/api/projects/:id', (req, res) => {
     .catch(err => res.status(500).json(err))
 })
 
-app.get('/api/palettes/:id', (req, res) => {
+app.get('/api/projects/palettes/:id', (req, res) => {
   const id = req.params.id
-  const errMsg = { error: `No palette with ID of ${id} found` }
+  const errMsg = { error: `No Palette with ID of ${id} found` }
   database('palettes').where('id', id).select()
     .then(palette => {
       if (palette.length === 0) return res.status(404).json(errMsg)
