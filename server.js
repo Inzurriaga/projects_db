@@ -19,19 +19,49 @@ app.listen(app.get('port'), () => console.log(`Listening on port ${app.get('port
 // custom api end point**
 
 app.get('/api/projects', (req, res) => {
-
+  database('projects').select()
+    .then(projects => {
+      res.status(200).json(projects)
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 app.get('/api/palettes', (req, res) => {
-
+  database('palettes').select()
+    .then(palettes => {
+      res.status(200).json(palettes)
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 app.get('/api/projects/:id', (req, res) => {
-
+  const id = req.params.id
+  const errMsg = { error: `No Project with ID of ${id} found` }
+  database('projects').where('id', id).select()
+    .then(project => {
+      if (project.length === 0) return res.status(404).json(errMsg)
+      res.status(200).json(project[0])
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 app.get('/api/palettes/:id', (req, res) => {
-
+  const id = req.params.id
+  const errMsg = { error: `No palette with ID of ${id} found` }
+  database('palettes').where('id', id).select()
+    .then(palette => {
+      if (palette.length === 0) return res.status(404).json(errMsg)
+      res.status(200).json(palette[0])
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 app.post('/api/projects', (req, res) => {
