@@ -6,7 +6,7 @@ const projectsData = [
       {
         name: 'Warm Colors',
         color1: '199111',
-        color2: '222222',
+        color2: '244222',
         color3: '333333',
         color4: '444444',
         color5: '555555',
