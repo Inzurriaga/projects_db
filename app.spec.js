@@ -75,7 +75,7 @@ describe('/api', () => {
   })
   describe('POST /projects', () => {
     it('Should add project and status 201', async () => {
-      const mockProject = { name: 'Milkyway', desc: 'desc' }
+      const mockProject = { name: 'Milkyway' }
 
       const response = await request(app).post('/api/projects').send(mockProject)
       const projects = await database('projects').where('id', response.body.id).select()
@@ -86,20 +86,62 @@ describe('/api', () => {
       expect(project.name).toBe(mockProject.name)
     })
     it('Should return error msg and status 422 if incorrect request', async () => {
-      const mockProject = { name: 'Milkyway' }
+      const mockProject = { notName: 'Milkyway' }
 
       const response = await request(app).post('/api/projects').send(mockProject)
 
+      const errMsg = { error: `Expected format of request: { name: <String> }.` }
+
       expect(response.status).toBe(422)
-      expect(response.body).toBe(mockProject.name)
+      expect(response.body).toEqual(errMsg)
     })
   })
   describe('POST /projects/palettes', () => {
-    it.skip('Should add palettes and status 201', async () => {
+    it('Should add palettes and status 201', async () => {
+      const mockpalette = {
+        name: 'Other Colors',
+        color1: '#263734',
+        color2: '#832923',
+        color3: '#983470',
+        color4: '#239473',
+        color5: '#232224',
+      }
+      const project = await database('projects').first()
 
+      const response = await request(app).post(`/api/projects/palettes/${project.id}`).send(mockpalette)
+      const palettes = await database('palettes').where('id', response.body.id).select()
+
+      const palette = palettes[0]
+
+      expect(response.status).toBe(201)
+      expect(palette.name).toBe(mockpalette.name)
     })
-    it.skip('Should return error msg and status 422 if incorrect request', async () => {
+    it('Should return error msg and status 422 if incorrect request', async () => {
+      const mockpalette = {
+        name: 'Other Colors',
+        color1: '#263734',
+        color2: '#832923',
+        color3: '#983470',
+        color4: '#239473',
+      }
+      const missing = 'color5'
+      const project = await database('projects').first()
 
+
+      const response = await request(app).post(`/api/projects/palettes/${project.id - 1}`).send(mockpalette)
+
+      const errMsg = {
+        error: `Expected format: 
+        { name: <String>,
+          color1: <String>,
+          color2: <String>,
+          color3: <String>,
+          color4: <String>,
+          color5: <String> }. You're missing a "${missing}" property.`
+      }
+
+      expect(response.status).toBe(422)
+      expect(response.body).toEqual(errMsg)
     })
   })
   describe('PATCH /projects/:id', () => {

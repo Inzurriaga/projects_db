@@ -56,9 +56,9 @@ app.get('/api/projects/palettes/:id', (req, res) => {
 app.post('/api/projects', (req, res) => {
   const project = req.body
 
-  for (let requiredParam of ['name', 'desc']) {
+  for (let requiredParam of ['name']) {
     if (!project[requiredParam]) {
-      const errMsg = { error: `Expected format: { name: <String>, desc: <String> }. You're missing a "${requiredParam}" property.` }
+      const errMsg = { error: `Expected format of request: { name: <String> }.` }
       return res.status(422).json(errMsg)
     }
   }
@@ -109,7 +109,7 @@ app.patch('/api/projects/:id', (req, res) => {
 
   database('projects').where('id', id).update(project, 'id')
     .then(projectId => {
-      res.status(200).json(`Project Id: ${projectId} updated.`)
+      res.status(200).json({ id: projectId[0] })
     })
     .catch(err => res.status(500).json(err))
 })
