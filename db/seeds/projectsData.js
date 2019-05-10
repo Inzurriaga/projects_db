@@ -1,7 +1,6 @@
 const projectsData = [
   {
     name: 'Project 1',
-    desc: 'Obligitory',
     palettes: [
       {
         name: 'Warm Colors',
@@ -23,7 +22,6 @@ const projectsData = [
   },
   {
     name: 'Project 2',
-    desc: 'Obligitory #2',
     palettes: [
       {
         name: 'other Colors',

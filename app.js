@@ -65,7 +65,7 @@ app.post('/api/projects', (req, res) => {
 
   database('projects').insert(project, 'id')
     .then(projectId => {
-      res.status(201).json(`Project created, ID: ${projectId}`)
+      res.status(201).json({ id: projectId[0] })
     })
     .catch(err => res.status(500).json(err))
 })
@@ -91,7 +91,7 @@ app.post('/api/projects/palettes/:project_id', (req, res) => { // foreign id
 
   database('palettes').insert(palette, 'id')
     .then(paletteId => {
-      res.status(201).json(`palette created, ID: ${paletteId}`)
+      res.status(201).json({ id: paletteId[0] })
     })
     .catch(err => res.status(500).json(err))
 })
