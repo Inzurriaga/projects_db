@@ -15,7 +15,7 @@ const projectsData = [
         name: 'cool Colors',
         color1: '666666',
         color2: '777777',
-        color3: '888888',
+        color3: '888008',
         color4: '999999',
         color5: '101010',
       }
