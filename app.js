@@ -141,7 +141,7 @@ app.patch('/api/projects/palettes/:id', (req, res) => {
     .catch(err => res.status(500).json(err))
 })
 
-app.delete('/api/project/:id', (req, res) => {
+app.delete('/api/projects/:id', (req, res) => {
   const id = req.params.id
 
   database('palettes').where('project_id', id).del()

@@ -62,7 +62,7 @@ describe('/api', () => {
       expect(result.id).toBe(palette.id)
     })
     it('Should return error msg and status 404 if none found', async () => {
-      const id = 0;
+      const id = 0;// refactor
 
       const response = await request(app).get(`/api/projects/palettes/${id}`)
       const result = response.body
