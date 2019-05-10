@@ -4,6 +4,6 @@ node_js:
 services:
   - postgresql
 before_script:
-  - psql -c 'create database projects_test;' -U postgres
+  - psql -c 'create database projects_db;' -U postgres
   - knex migrate:latest
   - knex seed:run
